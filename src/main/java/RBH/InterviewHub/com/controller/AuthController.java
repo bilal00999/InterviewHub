@@ -1,0 +1,55 @@
+package RBH.InterviewHub.com.controller;
+
+
+import RBH.InterviewHub.com.entity.User;
+import RBH.InterviewHub.com.service.JwtService;
+import RBH.InterviewHub.com.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("api/auth")
+@Slf4j
+public class AuthController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user){
+        userService.SaveNewUser(user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user){
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getUserName(),user.getPassword()
+                    )
+            );
+
+            String jwt=jwtService.generateToken(user.getUserName());
+            return new ResponseEntity<>(jwt,HttpStatus.OK);
+
+        }catch (Exception e){
+            log.error("Exception occurred while createAuthenticationToken ", e);
+            return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
+        }
+
+    }
+}
