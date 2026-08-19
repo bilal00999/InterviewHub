@@ -9,5 +9,5 @@ public interface RefreshTokenRepository extends MongoRepository<RefreshToken,Str
 
     Optional<RefreshToken> findByToken(String token);
 
-    void deleteByUserName(String username);
+//    void deleteByUserName(String userName);
 }
