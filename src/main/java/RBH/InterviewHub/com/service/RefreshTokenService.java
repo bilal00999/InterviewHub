@@ -22,13 +22,13 @@ public class RefreshTokenService {
 
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setUsername(userName);
-        refreshToken.setExpiryDate(Instant.now().plus(7, ChronoUnit.DAYS));
+        refreshToken.setExpiryDate(Instant.now().plus(1, ChronoUnit.MINUTES));
         refreshToken.setRevoked(false);
 
        return refreshTokenRepository.save(refreshToken);
     }
 
-    public Optional<RefreshToken> fingByToken(String token){
+    public Optional<RefreshToken> findByToken(String token){
         return refreshTokenRepository.findByToken(token);
     }
 
