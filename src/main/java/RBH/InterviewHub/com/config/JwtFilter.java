@@ -1,6 +1,5 @@
 package RBH.InterviewHub.com.config;
 
-import RBH.InterviewHub.com.entity.User;
 import RBH.InterviewHub.com.service.JwtService;
 import RBH.InterviewHub.com.service.UserDetailServiceImpl;
 import jakarta.servlet.FilterChain;
@@ -34,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String username=null;
 
 
-        if(authHeader!=null && authHeader.startsWith("bearer")){
+        if(authHeader!=null && authHeader.startsWith("Bearer")){
             jwtToken=authHeader.substring(7);
             username=jwtService.extractUserName(jwtToken);
         }
@@ -47,12 +46,10 @@ public class JwtFilter extends OncePerRequestFilter {
                                 user,null,user.getAuthorities()
                         );
                 SecurityContextHolder.getContext().setAuthentication(auth);
-            }else {
-                filterChain.doFilter(request,response);
             }
-        }else {
-            filterChain.doFilter(request,response);
         }
+            filterChain.doFilter(request,response);
+
 
 
     }

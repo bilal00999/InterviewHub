@@ -31,7 +31,7 @@ public class SpringSecurity {
         http
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
-                        .requestMatchers("/api/auth/login","/api/auth/register","/api/auth/refreshToken").permitAll()
+                        .requestMatchers("/api/auth/login","/api/auth/register","/api/auth/refreshToken","/api/auth/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

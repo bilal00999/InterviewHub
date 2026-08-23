@@ -38,7 +38,7 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token){
-        return extractExpiration(token).before(new Date());
+            return extractExpiration(token).before(new Date());
     }
 
     public String generateToken(String username) {
@@ -53,24 +53,18 @@ public class JwtService {
                 .header().empty().add("typ","JWT")
                 .and()
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 ))
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 ))
                 .signWith(getKey())
                 .compact();
     }
 
-    private String generateRefreshToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .header().empty().add("typ","JWT")
-                .and()
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7 ))
-                .signWith(getKey())
-                .compact();
-    }
+    public boolean validateToken(String token) {
 
-    public Boolean validateToken(String token) {
-        return !isTokenExpired(token);
+        try {
+            extractAllClaims(token);
+            return !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

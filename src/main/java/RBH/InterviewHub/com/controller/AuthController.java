@@ -1,6 +1,5 @@
 package RBH.InterviewHub.com.controller;
 
-
 import RBH.InterviewHub.com.entity.LoginResponse;
 import RBH.InterviewHub.com.entity.RefeshTokenRequest;
 import RBH.InterviewHub.com.entity.RefreshToken;
@@ -77,6 +76,8 @@ public class AuthController {
 
             String newAccessToken = jwtService.generateToken(refreshToken.getUsername());
 
+
+
             return new ResponseEntity<>("access token : "+newAccessToken,HttpStatus.OK);
         }catch (RuntimeException e ){
             return new ResponseEntity<>("refresh token expire",HttpStatus.FORBIDDEN);
@@ -84,9 +85,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(
-            @RequestBody RefeshTokenRequest request
-    ) {
+    public ResponseEntity<?> logout(@RequestBody RefeshTokenRequest request) {
 
         refreshTokenService.revokedToken(
                 request.getRefreshToken()
